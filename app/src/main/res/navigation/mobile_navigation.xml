@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.osrswybin.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.example.osrswybin.ui.tracking.TrackingFragment"
+        android:label="@string/title_track"
+        tools:layout="@layout/fragment_tracking" />
 
     <fragment
         android:id="@+id/navigation_notifications"
