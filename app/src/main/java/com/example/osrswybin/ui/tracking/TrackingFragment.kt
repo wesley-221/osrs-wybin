@@ -37,9 +37,7 @@ class TrackingFragment : Fragment() {
         createItemTouchHelper().attachToRecyclerView(root.rvOSRSAccounts)
 
         // Display all the accounts
-        for (i in 1 .. 15) {
-            this.osrsAccounts.add(OSRSAccount(i, "Test $i", 1500, 5000))
-        }
+        // TODO: :)
 
         root.btnTracknewUser.setOnClickListener {
             val intent = Intent(this@TrackingFragment.context, TrackNewUserActivity::class.java)

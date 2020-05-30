@@ -26,8 +26,8 @@ class OSRSAccountAdapter(private val osrsAccounts: List<OSRSAccount>) : Recycler
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(osrsAccount: OSRSAccount) {
             itemView.tvUsername.text = osrsAccount.username
-            itemView.tvExperience.text = osrsAccount.experience.toString()
-            itemView.tvTotalLevel.text = osrsAccount.totalLevel.toString()
+//            itemView.tvExperience.text = osrsAccount.experience.toString()
+//            itemView.tvTotalLevel.text = osrsAccount.totalLevel.toString()
         }
     }
 }
