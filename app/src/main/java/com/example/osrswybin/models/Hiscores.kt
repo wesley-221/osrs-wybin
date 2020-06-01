@@ -1,5 +1,8 @@
 package com.example.osrswybin.models
 
+import kotlinx.android.synthetic.main.skills_overview_first_row.*
+import kotlinx.android.synthetic.main.skills_overview_second_row.*
+import kotlinx.android.synthetic.main.skills_overview_third_row.*
 import okhttp3.*
 
 class Hiscores {

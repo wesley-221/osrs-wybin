@@ -12,6 +12,9 @@ import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
 import com.example.osrswybin.models.Skill
 import kotlinx.android.synthetic.main.activity_track_new_user.*
+import kotlinx.android.synthetic.main.skills_overview_first_row.*
+import kotlinx.android.synthetic.main.skills_overview_second_row.*
+import kotlinx.android.synthetic.main.skills_overview_third_row.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,8 +22,6 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
-import java.text.NumberFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class TrackNewUserActivity : AppCompatActivity() {
@@ -64,10 +65,31 @@ class TrackNewUserActivity : AppCompatActivity() {
                     verifyAccount = OSRSAccount(0, etUsername.text.toString(), skills, activities)
 
                     mainScope.launch {
-                        tvUsername.text = getString(R.string.verify_username, verifyAccount.username)
-                        tvTotalLevel.text = getString(  R.string.verify_level,
-                                                        verifyAccount.getSkillByName("Overall").level.toString(),
-                                                        NumberFormat.getNumberInstance(Locale.UK).format(verifyAccount.getSkillByName("Overall").experience))
+                        tvAttack.text = verifyAccount.getSkillByName("Attack").level.toString()
+                        tvStrength.text = verifyAccount.getSkillByName("Strength").level.toString()
+                        tvDefence.text = verifyAccount.getSkillByName("Defence").level.toString()
+                        tvRanged.text = verifyAccount.getSkillByName("Ranged").level.toString()
+                        tvPrayer.text = verifyAccount.getSkillByName("Prayer").level.toString()
+                        tvMagic.text = verifyAccount.getSkillByName("Magic").level.toString()
+                        tvRunecraft.text = verifyAccount.getSkillByName("Runecrafting").level.toString()
+                        tvConstruction.text = verifyAccount.getSkillByName("Construction").level.toString()
+
+                        tvHitpoints.text = verifyAccount.getSkillByName("Hitpoints").level.toString()
+                        tvAgility.text = verifyAccount.getSkillByName("Agility").level.toString()
+                        tvHerblore.text = verifyAccount.getSkillByName("Herblore").level.toString()
+                        tvThieving.text = verifyAccount.getSkillByName("Thieving").level.toString()
+                        tvCrafting.text = verifyAccount.getSkillByName("Crafting").level.toString()
+                        tvFletching.text = verifyAccount.getSkillByName("Fletching").level.toString()
+                        tvSlayer.text = verifyAccount.getSkillByName("Slayer").level.toString()
+                        tvHunter.text = verifyAccount.getSkillByName("Hunter").level.toString()
+
+                        tvMining.text = verifyAccount.getSkillByName("Mining").level.toString()
+                        tvSmithing.text = verifyAccount.getSkillByName("Smithing").level.toString()
+                        tvFishing.text = verifyAccount.getSkillByName("Fishing").level.toString()
+                        tvCooking.text = verifyAccount.getSkillByName("Cooking").level.toString()
+                        tvFiremaking.text = verifyAccount.getSkillByName("Firemaking").level.toString()
+                        tvWoodcutting.text = verifyAccount.getSkillByName("Woodcutting").level.toString()
+                        tvFarming.text = verifyAccount.getSkillByName("Farming").level.toString()
                     }
                 }
             }

@@ -12,8 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.tracking.TrackNewUserActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:name=".ui.tracking.TrackNewUserActivity" />
         <activity
             android:name=".ui.authentication.RegisterActivity"
             android:label="@string/title_activity_register"
