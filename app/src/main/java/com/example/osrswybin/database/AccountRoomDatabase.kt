@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.osrswybin.models.OSRSAccount
 
-@Database(entities = [OSRSAccount::class], version = 1, exportSchema = false)
-@TypeConverters(ArrayConverter::class)
+@Database(entities = [OSRSAccount::class], version = 2, exportSchema = false)
+@TypeConverters(com.example.osrswybin.database.TypeConverters::class)
 abstract class AccountRoomDatabase: RoomDatabase() {
     abstract fun accountDao(): AccountDao
 
@@ -22,7 +22,10 @@ abstract class AccountRoomDatabase: RoomDatabase() {
             if(accountsRoomDatabaseInstance == null) {
                 synchronized(AccountRoomDatabase::class.java) {
                     if(accountsRoomDatabaseInstance == null) {
-                        accountsRoomDatabaseInstance = Room.databaseBuilder(context.applicationContext, AccountRoomDatabase::class.java, DATABASE_NAME).build()
+                        accountsRoomDatabaseInstance = Room
+                            .databaseBuilder(context.applicationContext, AccountRoomDatabase::class.java, DATABASE_NAME)
+                            .fallbackToDestructiveMigration() // nuke old databases
+                            .build()
                     }
                 }
             }

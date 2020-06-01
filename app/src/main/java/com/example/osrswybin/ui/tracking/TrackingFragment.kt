@@ -1,6 +1,5 @@
 package com.example.osrswybin.ui.tracking
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +24,7 @@ const val TRACK_NEW_USER = 100
 
 class TrackingFragment : Fragment() {
     private val osrsAccounts = arrayListOf<OSRSAccount>()
-    private val osrsAccountsAdapter = OSRSAccountAdapter(osrsAccounts)
+    private val osrsAccountsAdapter = OSRSAccountAdapter(osrsAccounts, onClickListener = this::onAccountClick)
 
     private lateinit var accountRepository: AccountRepository
     private val mainScope = CoroutineScope(Dispatchers.Main)
@@ -100,15 +99,9 @@ class TrackingFragment : Fragment() {
         return ItemTouchHelper(callback)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                TRACK_NEW_USER -> {
-
-                }
-            }
-        }
+    private fun onAccountClick(osrsAccount: OSRSAccount) {
+        val intent = Intent(this@TrackingFragment.context, AccountOverview::class.java)
+        intent.putExtra("accountId", osrsAccount.id)
+        startActivity(intent)
     }
 }

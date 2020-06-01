@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.tracking.TrackNewUserActivity" />
+            android:name=".ui.tracking.AccountOverview"
+            android:label="@string/title_activity_account_overview" />
+        <activity android:name=".ui.tracking.TrackNewUserActivity" />
         <activity
             android:name=".ui.authentication.RegisterActivity"
             android:label="@string/title_activity_register"

@@ -3,6 +3,7 @@ package com.example.osrswybin.ui.tracking
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.example.osrswybin.models.Activity
 import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
 import com.example.osrswybin.models.Skill
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_track_new_user.*
 import kotlinx.android.synthetic.main.skills_overview_first_row.*
 import kotlinx.android.synthetic.main.skills_overview_second_row.*
@@ -24,6 +26,7 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import java.util.*
 import kotlin.collections.ArrayList
 
 class TrackNewUserActivity : AppCompatActivity() {
@@ -40,13 +43,13 @@ class TrackNewUserActivity : AppCompatActivity() {
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        btnVerify.setOnClickListener { onVerify() }
-        btnStartTracking.setOnClickListener { onStartTracking() }
+        btnVerify.setOnClickListener { onVerify(it) }
+        btnStartTracking.setOnClickListener { onStartTracking(it) }
 
         accountRepository = AccountRepository(this)
     }
 
-    fun onVerify() {
+    private fun onVerify(view: View) {
         if(!isValidUsername(etUsername.text.toString())) {
             val toast = Toast.makeText(this, "The username can't be empty or be longer than 30 characters.", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 16)
@@ -54,9 +57,12 @@ class TrackNewUserActivity : AppCompatActivity() {
             return
         }
 
+        Snackbar.make(view, "Trying to get data for ${etUsername.text}", Snackbar.LENGTH_SHORT).show()
+
         Hiscores.getHiscoresFromUser(etUsername.text.toString(), object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
+                Snackbar.make(view, "Failed to retrieve data for ${etUsername.text}", Snackbar.LENGTH_LONG).show()
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -67,7 +73,7 @@ class TrackNewUserActivity : AppCompatActivity() {
                     val skills: ArrayList<Skill> = Hiscores.getSkillsFromResponse(content)
                     val activities: ArrayList<Activity> = Hiscores.getActivitiesFromResponse(content)
 
-                    verifyAccount = OSRSAccount(0, etUsername.text.toString(), skills, activities)
+                    verifyAccount = OSRSAccount(0, etUsername.text.toString(), skills, activities, Calendar.getInstance().time)
 
                     mainScope.launch {
                         tvAttack.text = verifyAccount.getSkillByName("Attack").level.toString()
@@ -95,13 +101,15 @@ class TrackNewUserActivity : AppCompatActivity() {
                         tvFiremaking.text = verifyAccount.getSkillByName("Firemaking").level.toString()
                         tvWoodcutting.text = verifyAccount.getSkillByName("Woodcutting").level.toString()
                         tvFarming.text = verifyAccount.getSkillByName("Farming").level.toString()
+
+                        Snackbar.make(view, "Successfully retrieved data for ${etUsername.text}!", Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
         })
     }
 
-    fun onStartTracking() {
+    private fun onStartTracking(view: View) {
         if(!isValidUsername(etUsername.text.toString())) {
             val toast = Toast.makeText(this, "The username can't be empty or be longer than 30 characters.", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 16)
@@ -121,9 +129,7 @@ class TrackNewUserActivity : AppCompatActivity() {
                 accountRepository.insertAccount(verifyAccount)
             }
 
-            val toast = Toast.makeText(baseContext, "You are now tracking ${verifyAccount.username}!", Toast.LENGTH_SHORT)
-            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 16)
-            toast.show()
+            Snackbar.make(view, "You are now tracking ${verifyAccount.username}!", Snackbar.LENGTH_SHORT).show()
         }
     }
 

@@ -9,7 +9,7 @@ import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
 import kotlinx.android.synthetic.main.tracked_user.view.*
 
-class OSRSAccountAdapter(private val osrsAccounts: List<OSRSAccount>) : RecyclerView.Adapter<OSRSAccountAdapter.ViewHolder>() {
+class OSRSAccountAdapter(private val osrsAccounts: List<OSRSAccount>, private val onClickListener: (OSRSAccount) -> Unit) : RecyclerView.Adapter<OSRSAccountAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.tracked_user, parent, false)
@@ -22,11 +22,15 @@ class OSRSAccountAdapter(private val osrsAccounts: List<OSRSAccount>) : Recycler
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(osrsAccounts[position])
+
+        holder.itemView.setOnClickListener {
+            onClickListener.invoke(osrsAccounts[position])
+        }
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(osrsAccount: OSRSAccount) {
-            itemView.tvUsername.text = osrsAccount.username
+            itemView.tvLastUpdate.text = osrsAccount.username
             itemView.tvOverall.text = osrsAccount.getSkillByName("Overall").level.toString()
             itemView.tvCombat.text = Hiscores.calculateCombatLevel(osrsAccount).toString()
         }

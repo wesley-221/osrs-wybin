@@ -6,8 +6,10 @@ import com.example.osrswybin.models.Skill
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ArrayConverter {
+class TypeConverters {
     @TypeConverter
     fun skillsFromString(value: String):  ArrayList<Skill> {
         val listType: Type = object : TypeToken<ArrayList<Skill>>() {}.type
@@ -28,5 +30,15 @@ class ArrayConverter {
     @TypeConverter
     fun activitiesToString(activities: ArrayList<Activity>): String {
         return Gson().toJson(activities)
+    }
+
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
+    }
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
     }
 }
