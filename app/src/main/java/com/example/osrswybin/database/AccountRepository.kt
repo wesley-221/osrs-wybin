@@ -13,4 +13,5 @@ class AccountRepository(context: Context) {
 
     suspend fun getAllAccounts(): List<OSRSAccount> = accountDao.getAllAccounts()
     suspend fun insertAccount(account: OSRSAccount) = accountDao.insertAccount(account)
+    suspend fun deleteAccount(account: OSRSAccount) = accountDao.deleteAccount(account)
 }

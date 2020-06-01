@@ -1,6 +1,7 @@
 package com.example.osrswybin.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.osrswybin.models.OSRSAccount
@@ -12,4 +13,7 @@ interface AccountDao {
 
     @Insert
     suspend fun insertAccount(account: OSRSAccount)
+
+    @Delete
+    suspend fun deleteAccount(account: OSRSAccount)
 }

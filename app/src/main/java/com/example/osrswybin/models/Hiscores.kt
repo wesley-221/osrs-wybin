@@ -1,9 +1,7 @@
 package com.example.osrswybin.models
 
-import kotlinx.android.synthetic.main.skills_overview_first_row.*
-import kotlinx.android.synthetic.main.skills_overview_second_row.*
-import kotlinx.android.synthetic.main.skills_overview_third_row.*
 import okhttp3.*
+import kotlin.math.floor
 
 class Hiscores {
     companion object {
@@ -92,6 +90,18 @@ class Hiscores {
             }
 
             return activities
+        }
+
+        fun calculateCombatLevel(osrsAccount: OSRSAccount): Int {
+            val base = 0.25 * (osrsAccount.getSkillByName("Defence").level
+                     + osrsAccount.getSkillByName("Hitpoints").level +
+                    floor((osrsAccount.getSkillByName("Prayer").level / 2).toDouble()))
+
+            val melee = 0.325 * (osrsAccount.getSkillByName("Attack").level + osrsAccount.getSkillByName("Strength").level)
+            val range = 0.325 * (floor((3 * osrsAccount.getSkillByName("Ranged").level / 2).toDouble()))
+            val mage = 0.325 * (floor((3 * osrsAccount.getSkillByName("Magic").level / 2).toDouble()))
+
+            return floor(base + maxOf(melee, range, mage)).toInt()
         }
     }
 }

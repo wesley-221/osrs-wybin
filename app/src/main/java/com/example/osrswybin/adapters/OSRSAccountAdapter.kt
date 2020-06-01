@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.osrswybin.R
+import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
 import kotlinx.android.synthetic.main.tracked_user.view.*
 
@@ -26,8 +27,8 @@ class OSRSAccountAdapter(private val osrsAccounts: List<OSRSAccount>) : Recycler
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(osrsAccount: OSRSAccount) {
             itemView.tvUsername.text = osrsAccount.username
-//            itemView.tvExperience.text = osrsAccount.experience.toString()
-//            itemView.tvTotalLevel.text = osrsAccount.totalLevel.toString()
+            itemView.tvOverall.text = osrsAccount.getSkillByName("Overall").level.toString()
+            itemView.tvCombat.text = Hiscores.calculateCombatLevel(osrsAccount).toString()
         }
     }
 }

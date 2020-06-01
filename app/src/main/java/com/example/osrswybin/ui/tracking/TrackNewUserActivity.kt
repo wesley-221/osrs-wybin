@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.osrswybin.R
+import com.example.osrswybin.database.AccountRepository
 import com.example.osrswybin.models.Activity
 import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.skills_overview_third_row.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -27,6 +29,7 @@ import kotlin.collections.ArrayList
 class TrackNewUserActivity : AppCompatActivity() {
     private lateinit var verifyAccount: OSRSAccount
     private val mainScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var accountRepository: AccountRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,8 @@ class TrackNewUserActivity : AppCompatActivity() {
 
         btnVerify.setOnClickListener { onVerify() }
         btnStartTracking.setOnClickListener { onStartTracking() }
+
+        accountRepository = AccountRepository(this)
     }
 
     fun onVerify() {
@@ -104,7 +109,22 @@ class TrackNewUserActivity : AppCompatActivity() {
             return
         }
 
-        TODO("implement")
+        if(!::verifyAccount.isInitialized) {
+            val toast = Toast.makeText(this, "You haven't verified an account yet.", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 16)
+            toast.show()
+            return
+        }
+
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                accountRepository.insertAccount(verifyAccount)
+            }
+
+            val toast = Toast.makeText(baseContext, "You are now tracking ${verifyAccount.username}!", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 16)
+            toast.show()
+        }
     }
 
     private fun isValidUsername(username: String): Boolean {
