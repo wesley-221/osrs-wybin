@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.osrswybin.R
-import com.example.osrswybin.database.AccountRepository
+import com.example.osrswybin.database.account.AccountRepository
 import com.example.osrswybin.models.Activity
 import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
@@ -44,7 +44,8 @@ class AccountOverview : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         accountId = intent.getIntExtra("accountId", -1)
-        accountRepository = AccountRepository(this)
+        accountRepository =
+            AccountRepository(this)
 
         btnUpdate.setOnClickListener { updateAccount(it) }
 

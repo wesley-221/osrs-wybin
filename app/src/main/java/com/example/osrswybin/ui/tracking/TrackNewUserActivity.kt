@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.osrswybin.R
-import com.example.osrswybin.database.AccountRepository
+import com.example.osrswybin.database.account.AccountRepository
 import com.example.osrswybin.models.Activity
 import com.example.osrswybin.models.Hiscores
 import com.example.osrswybin.models.OSRSAccount
@@ -46,7 +46,8 @@ class TrackNewUserActivity : AppCompatActivity() {
         btnVerify.setOnClickListener { onVerify(it) }
         btnStartTracking.setOnClickListener { onStartTracking(it) }
 
-        accountRepository = AccountRepository(this)
+        accountRepository =
+            AccountRepository(this)
     }
 
     private fun onVerify(view: View) {

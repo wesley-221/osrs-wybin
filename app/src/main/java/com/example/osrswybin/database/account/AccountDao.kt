@@ -1,4 +1,4 @@
-package com.example.osrswybin.database
+package com.example.osrswybin.database.account
 
 import androidx.room.*
 import com.example.osrswybin.models.OSRSAccount

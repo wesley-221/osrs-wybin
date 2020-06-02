@@ -1,13 +1,14 @@
-package com.example.osrswybin.database
+package com.example.osrswybin.database.account
 
 import android.content.Context
+import com.example.osrswybin.database.RDatabase
 import com.example.osrswybin.models.OSRSAccount
 
 class AccountRepository(context: Context) {
     private val accountDao: AccountDao
 
     init {
-        val database = AccountRoomDatabase.getDatabase(context)
+        val database = RDatabase.getDatabase(context)
         accountDao = database!!.accountDao()
     }
 

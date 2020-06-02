@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.osrswybin.R
 import com.example.osrswybin.adapters.OSRSAccountAdapter
-import com.example.osrswybin.database.AccountRepository
+import com.example.osrswybin.database.account.AccountRepository
 import com.example.osrswybin.models.OSRSAccount
 import kotlinx.android.synthetic.main.fragment_tracking.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,8 @@ class TrackingFragment : Fragment() {
         root.rvOSRSAccounts.layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
         root.rvOSRSAccounts.adapter = osrsAccountsAdapter
 
-        accountRepository = AccountRepository(this.requireContext())
+        accountRepository =
+            AccountRepository(this.requireContext())
 
         // Add itemTouchHelper
         createItemTouchHelper().attachToRecyclerView(root.rvOSRSAccounts)
