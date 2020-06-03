@@ -1,6 +1,7 @@
 package com.example.osrswybin.models
 
 import okhttp3.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.floor
 
 class Hiscores {
@@ -66,7 +67,13 @@ class Hiscores {
         private val HISCORE_URL = "$API_URL/m=hiscore_oldschool/index_lite.ws?player="
 
         fun getHiscoresFromUser(username: String, callback: Callback) {
-            val client = OkHttpClient()
+            // Increase read time because api is slow
+            val client = OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build()
+
             val request = Request.Builder().url("$HISCORE_URL$username").build()
 
             client.newCall(request).enqueue(callback)

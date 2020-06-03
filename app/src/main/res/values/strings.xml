@@ -29,4 +29,6 @@
     <string name="close">Close</string>
     <string name="experience_gained">%s experienced gained since \n%s</string>
     <string name="experience_gained_string">%s %d</string>
+    <string name="logout">Logout</string>
+    <string name="logged_in_as">Logged in as %s</string>
 </resources>
