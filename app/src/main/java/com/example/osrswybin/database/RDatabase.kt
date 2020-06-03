@@ -10,7 +10,7 @@ import com.example.osrswybin.database.account_older_data.AccountOlderDataDao
 import com.example.osrswybin.models.OSRSAccount
 import com.example.osrswybin.models.OSRSAccountOlderData
 
-@Database(entities = [OSRSAccount::class, OSRSAccountOlderData::class], version = 2, exportSchema = false)
+@Database(entities = [OSRSAccount::class, OSRSAccountOlderData::class], version = 4, exportSchema = false)
 @TypeConverters(com.example.osrswybin.database.TypeConverters::class)
 abstract class RDatabase: RoomDatabase() {
     abstract fun accountDao(): AccountDao

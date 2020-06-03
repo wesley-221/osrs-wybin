@@ -42,15 +42,4 @@ class TypeConverters {
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time
     }
-
-    @TypeConverter
-    fun osrsAccountToString(osrsAccount: OSRSAccount): String {
-        return Gson().toJson(osrsAccount)
-    }
-
-    @TypeConverter
-    fun osrsAccountFromString(value: String): OSRSAccount {
-        val type: Type = object : TypeToken<OSRSAccount>() {}.type
-        return Gson().fromJson(value, type)
-    }
 }

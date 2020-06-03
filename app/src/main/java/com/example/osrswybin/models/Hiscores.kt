@@ -37,6 +37,31 @@ class Hiscores {
             "Wintertodt","Zalcano","Zulrah"
         )
 
+        // Skill variables
+        val ATTACK = "Attack"
+        val DEFENCE = "Defence"
+        val STRENGTH = "Strength"
+        val HITPOINTS = "Hitpoints"
+        val RANGED = "Ranged"
+        val PRAYER = "Prayer"
+        val MAGIC = "Magic"
+        val COOKING = "Cooking"
+        val WOODCUTTING = "Woodcutting"
+        val FLETCHING = "Fletching"
+        val FISHING = "Fishing"
+        val FIREMAKING = "Firemaking"
+        val CRAFTING = "Crafting"
+        val SMITHING = "Smithing"
+        val MINING = "Mining"
+        val HERBLORE = "Herblore"
+        val AGILITY = "Agility"
+        val THIEVING = "Thieving"
+        val SLAYER = "Slayer"
+        val FARMING = "Farming"
+        val RUNECRAFTING = "Runecrafting"
+        val HUNTER  = "Hunter"
+        val CONSTRUCTION = "Construction"
+
         private val API_URL = "https://secure.runescape.com"
         private val HISCORE_URL = "$API_URL/m=hiscore_oldschool/index_lite.ws?player="
 

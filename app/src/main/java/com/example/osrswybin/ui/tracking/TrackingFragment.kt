@@ -20,8 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-const val TRACK_NEW_USER = 100
-
 class TrackingFragment : Fragment() {
     private val osrsAccounts = arrayListOf<OSRSAccount>()
     private val osrsAccountsAdapter = OSRSAccountAdapter(osrsAccounts, onClickListener = this::onAccountClick)
@@ -40,8 +38,7 @@ class TrackingFragment : Fragment() {
         root.rvOSRSAccounts.layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
         root.rvOSRSAccounts.adapter = osrsAccountsAdapter
 
-        accountRepository =
-            AccountRepository(this.requireContext())
+        accountRepository = AccountRepository(this.requireContext())
 
         // Add itemTouchHelper
         createItemTouchHelper().attachToRecyclerView(root.rvOSRSAccounts)
@@ -59,7 +56,7 @@ class TrackingFragment : Fragment() {
 
         root.btnTracknewUser.setOnClickListener {
             val intent = Intent(this@TrackingFragment.context, TrackNewUserActivity::class.java)
-            startActivityForResult(intent, TRACK_NEW_USER);
+            startActivity(intent);
         }
 
         return root

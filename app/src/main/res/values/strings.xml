@@ -26,4 +26,7 @@
     <string name="img">img</string>
     <string name="title_activity_account_overview">AccountOverview</string>
     <string name="update">Update</string>
+    <string name="close">Close</string>
+    <string name="experience_gained">%s experienced gained since \n%s</string>
+    <string name="experience_gained_string">%s %d</string>
 </resources>
