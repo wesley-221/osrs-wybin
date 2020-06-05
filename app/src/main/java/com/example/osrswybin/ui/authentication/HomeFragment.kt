@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.example.osrswybin.R
-import com.example.osrswybin.models.Authentication
-import com.example.osrswybin.models.Credentials
+import com.example.osrswybin.database.account.AccountRepository
+import com.example.osrswybin.models.*
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_track_new_user.*
 import kotlinx.android.synthetic.main.content_logged_in.view.*
 import kotlinx.android.synthetic.main.content_login.*
 import kotlinx.android.synthetic.main.content_login.view.*
@@ -20,10 +22,13 @@ import kotlinx.android.synthetic.main.content_login.view.tbUsername
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
@@ -31,6 +36,7 @@ class HomeFragment : Fragment() {
     private var authToken: String? = null
     private var username: String? = null
     private lateinit var root: View
+    private lateinit var accountRepository: AccountRepository
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -38,6 +44,7 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         authToken = Credentials.getAccessToken(requireActivity())
+        accountRepository = AccountRepository(requireActivity())
 
         if(authToken == null) {
             root = inflater.inflate(R.layout.content_login, container, false)
@@ -70,6 +77,45 @@ class HomeFragment : Fragment() {
                                     val authenticationToken = response.headers["Authorization"]
 
                                     Credentials.saveCredentials(requireContext(), authenticationToken, tbUsername.text.toString())
+
+                                    Authentication.getTrackedUsers(authenticationToken.toString(), object : Callback {
+                                        override fun onFailure(call: Call, e: IOException) {
+                                            e.printStackTrace()
+                                        }
+
+                                        override fun onResponse(call: Call, response: Response) {
+                                            if(response.isSuccessful) {
+                                                val responseBody = response.body
+                                                val content = Gson().fromJson(responseBody?.string(), ArrayList::class.java)
+
+                                                for(username in content) {
+                                                    Hiscores.getHiscoresFromUser(username as String, object : Callback {
+                                                        override fun onFailure(call: Call, e: IOException) {
+                                                            e.printStackTrace()
+                                                        }
+
+                                                        override fun onResponse(call: Call,response: Response) {
+                                                            if(response.isSuccessful) {
+                                                                val hiscoreResponseBody = response.body
+                                                                val hiscoreContent = hiscoreResponseBody?.string()
+
+                                                                val skills: ArrayList<Skill> = Hiscores.getSkillsFromResponse(hiscoreContent)
+                                                                val activities: ArrayList<Activity> = Hiscores.getActivitiesFromResponse(hiscoreContent)
+
+                                                                val osrsAccount = OSRSAccount(0, username, skills, activities, Calendar.getInstance().time)
+
+                                                                mainScope.launch {
+                                                                    withContext(Dispatchers.IO) {
+                                                                        accountRepository.insertAccount(osrsAccount)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    })
 
                                     Toast.makeText(this@HomeFragment.context, "Successfully logged in, welcome ${root.tbUsername.text}!", Toast.LENGTH_SHORT).show()
                                     reloadFragment()

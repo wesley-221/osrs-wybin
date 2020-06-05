@@ -18,11 +18,6 @@
         <activity
             android:name=".ui.authentication.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName=".ui.authentication.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.authentication.LoginActivity"
-            android:label="@string/title_activity_login"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

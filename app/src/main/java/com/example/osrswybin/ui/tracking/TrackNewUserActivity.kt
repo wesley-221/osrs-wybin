@@ -1,6 +1,7 @@
 package com.example.osrswybin.ui.tracking
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
@@ -9,10 +10,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.osrswybin.R
 import com.example.osrswybin.database.account.AccountRepository
-import com.example.osrswybin.models.Activity
-import com.example.osrswybin.models.Hiscores
-import com.example.osrswybin.models.OSRSAccount
-import com.example.osrswybin.models.Skill
+import com.example.osrswybin.models.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_track_new_user.*
 import kotlinx.android.synthetic.main.skills_overview_first_row.*
@@ -34,6 +32,8 @@ class TrackNewUserActivity : AppCompatActivity() {
     private val mainScope = CoroutineScope(Dispatchers.Main)
     private lateinit var accountRepository: AccountRepository
 
+    private var authToken: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track_new_user)
@@ -45,6 +45,8 @@ class TrackNewUserActivity : AppCompatActivity() {
 
         btnVerify.setOnClickListener { onVerify(it) }
         btnStartTracking.setOnClickListener { onStartTracking(it) }
+
+        authToken = Credentials.getAccessToken(this)
 
         accountRepository =
             AccountRepository(this)
@@ -128,6 +130,23 @@ class TrackNewUserActivity : AppCompatActivity() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 accountRepository.insertAccount(verifyAccount)
+
+                val authTokenSend: String = (if(authToken.isNullOrBlank()) "null" else authToken.toString())
+
+                if(authTokenSend != "null") {
+                    val osrsAccounts = accountRepository.getAllAccounts()
+
+                    // Save tracked users
+                    Authentication.saveTrackedUsers(osrsAccounts, authTokenSend, object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            response.close()
+                        }
+                    })
+                }
             }
 
             Snackbar.make(view, "You are now tracking ${verifyAccount.username}!", Snackbar.LENGTH_SHORT).show()

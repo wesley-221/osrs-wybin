@@ -13,12 +13,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.osrswybin.R
 import com.example.osrswybin.adapters.OSRSAccountAdapter
 import com.example.osrswybin.database.account.AccountRepository
+import com.example.osrswybin.models.Authentication
+import com.example.osrswybin.models.Credentials
 import com.example.osrswybin.models.OSRSAccount
 import kotlinx.android.synthetic.main.fragment_tracking.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import java.io.IOException
 
 class TrackingFragment : Fragment() {
     private val osrsAccounts = arrayListOf<OSRSAccount>()
@@ -27,12 +33,16 @@ class TrackingFragment : Fragment() {
     private lateinit var accountRepository: AccountRepository
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
+    private var authToken: String? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_tracking, container, false)
+
+        authToken = Credentials.getAccessToken(requireActivity())
 
         // Setup adapter
         root.rvOSRSAccounts.layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
@@ -82,6 +92,23 @@ class TrackingFragment : Fragment() {
                         mainScope.launch {
                             withContext(Dispatchers.IO) {
                                 accountRepository.deleteAccount(osrsAccounts[position])
+
+                                val authTokenSend: String = (if(authToken.isNullOrBlank()) "null" else authToken.toString())
+
+                                if(authTokenSend != "null") {
+                                    val osrsAccounts = accountRepository.getAllAccounts()
+
+                                    // Save tracked users
+                                    Authentication.saveTrackedUsers(osrsAccounts, authTokenSend, object : Callback {
+                                        override fun onFailure(call: Call, e: IOException) {
+                                            e.printStackTrace()
+                                        }
+
+                                        override fun onResponse(call: Call, response: Response) {
+                                            response.close()
+                                        }
+                                    })
+                                }
                             }
 
                             osrsAccounts.removeAt(position);
